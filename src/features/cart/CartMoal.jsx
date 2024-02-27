@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-import CartItem from "./CartItem";
 
 const CartModal = forwardRef( function Modal ({msg},ref) {
     

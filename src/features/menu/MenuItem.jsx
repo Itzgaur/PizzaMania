@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom";
 import Button from "../../ui/Button";
-import { useDispatch } from "react-redux";
-import { addtoCart } from "../cart/CartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addtoCart, getCurrentQuantity } from "../cart/CartSlice";
+import UpdateQuantity from "../cart/UpdateQuantity";
 
 export default function MenuItem({ pizza }) {
   const { id, name, imageUrl, unitPrice, ingredients } = pizza;
 
   const dispatch = useDispatch()
+  const currentQuantity = useSelector(getCurrentQuantity(id))
+  // console.log(`${name}: ${currentQuantity}`)
+  
+  const isIncart = currentQuantity >0
 
   function handleAddCart() {
   
@@ -25,7 +30,7 @@ export default function MenuItem({ pizza }) {
     <>
       <div
         className="mb-3 flex
-        grow items-center gap-4 rounded-md bg-slate-200 shadow-md bg-red-200" 
+        grow items-center gap-4 rounded-md bg-red-200 shadow-md " 
       >
         <img
           src={imageUrl}
@@ -46,8 +51,9 @@ export default function MenuItem({ pizza }) {
             Price: <span className="text-lg font-semibold">{unitPrice}0 ₹</span>
           </p>
           <Link >
-            {" "}
-            <Button onclick ={handleAddCart}>Add to Cart</Button>
+            {!isIncart ? <Button onclick={handleAddCart}>Add to Cart</Button> :
+             <UpdateQuantity currentQuantity={currentQuantity} id={id} />
+            }
           </Link>
         </div>
       </div>

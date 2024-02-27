@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import Button from "../../ui/Button"
-import { removeFromCart } from "./CartSlice"
+import { getCurrentQuantity, removeFromCart } from "./CartSlice"
+import UpdateQuantity from "./UpdateQuantity"
 
 // const item ={
 // "id": 1,
@@ -21,7 +22,9 @@ export default function CartItem({item}) {
     const dispatch = useDispatch()
 
     const { unitPrice, imageUrl, quantity, name,id,totalPrice } = item
-    console.log(item)
+    // console.log(item)
+
+    const currentQuantity = useSelector(getCurrentQuantity(id))
 
 
     function handleRemove() {
@@ -36,7 +39,8 @@ export default function CartItem({item}) {
         <div className="mr-6">
             <p className="">{name} <span>({unitPrice}0 ₹)</span> <span>x {quantity}</span></p>
             <p>Total Price: <span>{totalPrice} ₹</span></p>
+        <UpdateQuantity currentQuantity={currentQuantity} id={id}/>
         </div>
-        <Button className="mr-4" onclick={handleRemove}>Remove</Button>
+         <Button className="mr-4" onclick={handleRemove}>Remove</Button>
     </div>
 }

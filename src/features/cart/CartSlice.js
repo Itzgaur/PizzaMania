@@ -1,20 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    cart:[{
-"id": 1,
-"name": "Margherita",
-"unitPrice": 12,
-"imageUrl": "https://dclaevazetcjjkrzczpc.supabase.co/storage/v1/object/public/pizzas/pizza-1.jpg",
-"ingredients": [
-"tomato",
-"mozzarella",
-    "basil"
-
-],
-        "soldOut": false,
-"quantity":1
-}]
+    cart:[]
 }
 
 
@@ -29,10 +16,28 @@ const cartSlice = createSlice({
         },
         removeFromCart(state,action) {
             state.cart = state.cart.filter((item) => item.id !== action.payload)
+        },
+        increaseQty(state, action) {
+            const pizza = state.cart.find((item) => item.id === action.payload)
+            pizza.quantity++;
+            pizza.totalPrice = pizza.quantity * pizza.unitPrice *10
+        },
+        decreaseQty(state, action) {
+            const pizza = state.cart.find((item) => item.id === action.payload)
+            pizza.quantity--;
+            if (pizza.quantity === 0) cartSlice.caseReducers.removeFromCart(state,action);
+            else pizza.totalPrice = pizza.quantity * pizza.unitPrice * 10;
         }
         
     }
 })
 
-export const { addtoCart, removeFromCart } = cartSlice.actions
+
+
+
+
+export const getCurrentQuantity = (id) => (state) =>  state.cart.cart.find((item) => item.id === id)?.quantity ?? 0;
+export const getTotalCost = (state) => state.cart.cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
+export const { addtoCart, removeFromCart,increaseQty ,decreaseQty} = cartSlice.actions
 export default cartSlice.reducer
